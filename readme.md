@@ -5,3 +5,5 @@
 [1.java多线程基本知识和线程的创建及状态](https://blog.csdn.net/weixin_41922289/article/details/91910154)
 
 [2.线程之间的通信](https://blog.csdn.net/weixin_41922289/article/details/91979432)
+
+[3.synchronized和volatile](https://blog.csdn.net/weixin_41922289/article/details/92026532)
