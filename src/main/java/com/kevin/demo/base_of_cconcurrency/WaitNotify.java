@@ -3,10 +3,13 @@ package com.kevin.demo.base_of_cconcurrency;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @Auther: Kevin
- * @Date:
- * @ClassName:WaitNotify
- * @Description: TODO
+ * @Description:    等待超时机制 和 通知等待机制
+ * @Author:         Kevin
+ * @CreateDate:     2019/6/14 17:29
+ * @UpdateUser:     Kevin
+ * @UpdateDate:     2019/6/14 17:29
+ * @UpdateRemark:   修改内容
+ * @Version: 1.0
  */
 @Slf4j
 public class WaitNotify {

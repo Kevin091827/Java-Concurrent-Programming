@@ -7,10 +7,13 @@ import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
 
 /**
- * @Auther: Kevin
- * @Date:
- * @ClassName:MultiThread
- * @Description: TODO
+ * @Description:    获取线程信息
+ * @Author:         Kevin
+ * @CreateDate:     2019/6/14 17:29
+ * @UpdateUser:     Kevin
+ * @UpdateDate:     2019/6/14 17:29
+ * @UpdateRemark:   修改内容
+ * @Version: 1.0
  */
 @Slf4j
 public class MultiThread {
