@@ -60,4 +60,17 @@ public class ThreadPoolExecutorDemo {
     public ExecutorService cachedThreadPool(){
         return Executors.newCachedThreadPool();
     }
+
+    /**
+     * 线程池关闭
+     * @param executorService
+     */
+    public void shutDownThreadPool(ExecutorService executorService){
+        //遍历线程池中的工作线程，然后逐个调用线程的interrupt方法来中断线程
+
+        //按过去执行已提交任务的顺序发起一个有序的关闭
+        executorService.shutdown();
+        //shutdownNow会强制停止所有正在执行的任务
+        //executorService.shutdownNow();
+    }
 }
