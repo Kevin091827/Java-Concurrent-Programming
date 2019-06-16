@@ -9,3 +9,5 @@
 [3.synchronized和volatile](https://blog.csdn.net/weixin_41922289/article/details/92026532)
 
 [4.线程池](https://blog.csdn.net/weixin_41922289/article/details/92261019)
+
+[5.ThreadLocal](https://blog.csdn.net/weixin_41922289/article/details/92411147)
