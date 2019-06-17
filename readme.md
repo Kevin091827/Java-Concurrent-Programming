@@ -11,3 +11,5 @@
 [4.线程池](https://blog.csdn.net/weixin_41922289/article/details/92261019)
 
 [5.ThreadLocal](https://blog.csdn.net/weixin_41922289/article/details/92411147)
+
+[6.ScheduledThreadPoolExecutor](https://blog.csdn.net/weixin_41922289/article/details/92611550)
