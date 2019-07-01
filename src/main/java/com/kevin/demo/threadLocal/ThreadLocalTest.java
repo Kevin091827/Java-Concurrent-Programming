@@ -1,5 +1,7 @@
 package com.kevin.demo.threadLocal;
 
+import java.util.concurrent.locks.ReentrantLock;
+
 /**
  * @Auther: Kevin
  * @Date:
@@ -8,5 +10,7 @@ package com.kevin.demo.threadLocal;
  */
 public class ThreadLocalTest {
 
+    public static void main(String[] args) {
+    }
 
 }
