@@ -7,6 +7,7 @@ import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
@@ -157,5 +158,45 @@ public class HttpClientUtils {
         return doPost(url, null);
     }
 
+    /**
+     * <h>json/xml方式进行post请求</h>
+     *
+     * <li>json: type = "application/json"</li>
+     * <li>xml: type = "text/xml"</li>
+     * @param json
+     * @param url
+     * @return
+     */
+    public static String doPost(String json,String url,String type){
 
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        CloseableHttpResponse response = null;
+        String result = "";
+        try{
+            HttpPost httpPost = new HttpPost(url);
+            //json方式交互
+            httpPost.setHeader("Content-Type",type);
+            if(json != null){
+                StringEntity stringEntity = new StringEntity(json,"utf-8");
+                httpPost.setEntity(stringEntity);
+            }
+            response = httpClient.execute(httpPost);
+            int statusCode = response.getStatusLine().getStatusCode();
+            if(statusCode == 200){
+                log.info("request is ok");
+                result = EntityUtils.toString(response.getEntity(),"utf-8");
+            }
+        }catch (Exception e){
+            log.error("request is error: "+ e.getMessage());
+        }finally {
+            if(response != null){
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
 }
