@@ -32,7 +32,7 @@ import java.util.Map;
 public class HttpClientUtils {
 
     /**
-     * 处理get请求
+     * <h>处理get请求</h>
      * @param params
      * @param url
      * @return
@@ -88,7 +88,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * 无参get请求
+     * <h>无参get请求</h>
      * @param url
      * @return
      */
@@ -97,7 +97,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * 普通post请求
+     * <h>普通post请求</h>
      * @param url
      * @param params
      * @return
@@ -150,7 +150,7 @@ public class HttpClientUtils {
     }
 
     /**
-     * 处理无参普通post请求
+     * <h>处理无参普通post请求</h>
      * @param url
      * @return
      */
@@ -176,6 +176,7 @@ public class HttpClientUtils {
             HttpPost httpPost = new HttpPost(url);
             //json方式交互
             httpPost.setHeader("Content-Type",type);
+            httpPost.setHeader("charset", "utf-8");
             if(json != null){
                 StringEntity stringEntity = new StringEntity(json,"utf-8");
                 httpPost.setEntity(stringEntity);
