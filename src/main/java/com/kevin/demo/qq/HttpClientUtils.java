@@ -1,21 +1,29 @@
 package com.kevin.demo.qq;
 
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.http.Consts;
 import org.apache.http.NameValuePair;
+import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.utils.URIBuilder;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -163,11 +171,11 @@ public class HttpClientUtils {
      *
      * <li>json: type = "application/json"</li>
      * <li>xml: type = "text/xml"</li>
-     * @param json
+     * @param paramString
      * @param url
      * @return
      */
-    public static String doPost(String json,String url,String type){
+    public static String doPost(String paramString,String url,String type){
 
         CloseableHttpClient httpClient = HttpClients.createDefault();
         CloseableHttpResponse response = null;
@@ -177,8 +185,8 @@ public class HttpClientUtils {
             //json方式交互
             httpPost.setHeader("Content-Type",type);
             httpPost.setHeader("charset", "utf-8");
-            if(json != null){
-                StringEntity stringEntity = new StringEntity(json,"utf-8");
+            if(paramString != null){
+                StringEntity stringEntity = new StringEntity(paramString,"utf-8");
                 httpPost.setEntity(stringEntity);
             }
             response = httpClient.execute(httpPost);
@@ -189,6 +197,81 @@ public class HttpClientUtils {
             }
         }catch (Exception e){
             log.error("request is error: "+ e.getMessage());
+        }finally {
+            if(response != null){
+                try {
+                    response.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * <h>post方式上传文件到第三方接口</h>
+     * @param filePath
+     * @param fileName
+     * @param url
+     */
+    public static String doPostFile(String filePath,String fileName,Map<String,String> params,String url){
+
+        //构建 httpClient
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        //响应
+        CloseableHttpResponse response = null;
+        //响应结果
+        String result = "";
+        try{
+            //构建 httpPost
+            HttpPost httpPost = new HttpPost(url);
+            //配置请求设置
+            //防止文件过大，导致请求超时
+            RequestConfig requestConfig = RequestConfig.custom()
+                    .setConnectionRequestTimeout(5000)
+                    .setConnectionRequestTimeout(5000)
+                    .setSocketTimeout(5000)
+                    .build();
+            httpPost.setConfig(requestConfig);
+            //文件上传
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            //解决中文文件名乱码
+            multipartEntityBuilder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);
+            //解决编码问题
+            multipartEntityBuilder.setCharset(Consts.UTF_8);
+            ContentType contentType = ContentType.create(ContentType.TEXT_PLAIN.getMimeType(),Consts.UTF_8);
+            //可拼接参数
+            if(params != null){
+                for(String key : params.keySet()){
+                    multipartEntityBuilder.addTextBody(key,params.get(key),contentType);
+                }
+            }
+            if(filePath != null && fileName != null){
+                //将文件路径转为文件输入流
+                FileInputStream fileInputStream = new FileInputStream(filePath);
+                multipartEntityBuilder.addBinaryBody("file", fileInputStream, ContentType.DEFAULT_BINARY, fileName);
+            }
+            //封装请求体
+            httpPost.setEntity(multipartEntityBuilder.build());
+            //执行请求
+            response = httpClient.execute(httpPost);
+            //状态码
+            int statusCode = response.getStatusLine().getStatusCode();
+            //封装结果map
+            Map map = new HashMap<String,String>();
+            if(statusCode == 200){
+                map.put("code",statusCode);
+                map.put("msg","ok");
+            }else{
+                map.put("code",statusCode);
+                map.put("msg","error");
+            }
+            //封装结果json
+            JSONObject resultJson = JSONObject.parseObject(map.toString());
+            result = resultJson.toJSONString();
+        }catch (Exception e){
+            log.error("upload file request error: " + e.getMessage());
         }finally {
             if(response != null){
                 try {
