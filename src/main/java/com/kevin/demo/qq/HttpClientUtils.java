@@ -39,6 +39,14 @@ import java.util.Map;
 @Slf4j
 public class HttpClientUtils {
 
+    //状态码
+    private static int STATUS_OK = 200;
+    //连接超时时间
+    private static int CONNECTION_REQUEST_TIMEOUT = 5000;
+    //连接超时时间
+    private static int SOCKET_TIMEOUT = 5000;
+
+
     /**
      * <h>处理get请求</h>
      * @param params
@@ -73,7 +81,7 @@ public class HttpClientUtils {
             //请求状态码
             int statusCode = response.getStatusLine().getStatusCode();
             //判断是否请求成功
-            if(statusCode == 200){
+            if(statusCode == STATUS_OK){
                 //请求正常
                 log.info("request is ok");
                 //请求结果,获取响应
@@ -139,7 +147,7 @@ public class HttpClientUtils {
             //获取请求状态
             int requestCode = response.getStatusLine().getStatusCode();
             //判断状态
-            if(requestCode == 200){
+            if(requestCode == STATUS_OK){
                 result = EntityUtils.toString(response.getEntity(),"utf-8");
                 log.info("response is "+result);
             }
@@ -191,7 +199,7 @@ public class HttpClientUtils {
             }
             response = httpClient.execute(httpPost);
             int statusCode = response.getStatusLine().getStatusCode();
-            if(statusCode == 200){
+            if(statusCode == STATUS_OK){
                 log.info("request is ok");
                 result = EntityUtils.toString(response.getEntity(),"utf-8");
             }
@@ -229,9 +237,8 @@ public class HttpClientUtils {
             //配置请求设置
             //防止文件过大，导致请求超时
             RequestConfig requestConfig = RequestConfig.custom()
-                    .setConnectionRequestTimeout(5000)
-                    .setConnectionRequestTimeout(5000)
-                    .setSocketTimeout(5000)
+                    .setConnectionRequestTimeout(CONNECTION_REQUEST_TIMEOUT)
+                    .setSocketTimeout(SOCKET_TIMEOUT)
                     .build();
             httpPost.setConfig(requestConfig);
             //文件上传
@@ -260,7 +267,7 @@ public class HttpClientUtils {
             int statusCode = response.getStatusLine().getStatusCode();
             //封装结果map
             Map map = new HashMap<String,String>();
-            if(statusCode == 200){
+            if(statusCode == STATUS_OK){
                 map.put("code",statusCode);
                 map.put("msg","ok");
             }else{
@@ -283,4 +290,5 @@ public class HttpClientUtils {
         }
         return result;
     }
+
 }
